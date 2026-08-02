@@ -18,9 +18,13 @@ brew "orchestrator-mcp-server"
 
 ## Notes
 
-The formula builds every Python dependency from source, including four Rust crates
-(`pydantic-core`, `jiter`, `tokenizers`, `rpds-py`), so the first install takes several
-minutes. If you would rather not wait:
+Apple Silicon pours a prebuilt bottle, published per version as a GitHub release of
+this repository.
+
+Anywhere else, the formula builds every Python dependency from source, including
+several Rust crates, so the first install takes around fifteen minutes. x86 macOS gets
+no bottle because homebrew-core no longer bottles parts of this dependency tree for it.
+If you would rather not wait:
 
 ```bash
 uvx orchestrator-mcp-server
