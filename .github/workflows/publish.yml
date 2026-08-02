@@ -32,12 +32,17 @@ jobs:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_SHA: ${{ inputs.head_sha }}
           PULL_REQUEST: ${{ inputs.pull_request }}
+          # Bottles ride on a GitHub release of this tap rather than on GitHub
+          # Packages: a new ghcr package is private by default, which would make
+          # every download 401 until someone flipped it in the web UI. Release
+          # assets inherit the repository's visibility instead.
+          ROOT_URL: https://github.com/${{ github.repository }}/releases/download/bottles
         run: |
           if [[ -n "$HEAD_SHA" ]]
           then
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --head-sha="$HEAD_SHA" "$PULL_REQUEST"
+            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --root-url="$ROOT_URL" --head-sha="$HEAD_SHA" "$PULL_REQUEST"
           else
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
+            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --root-url="$ROOT_URL" "$PULL_REQUEST"
           fi
 
       - name: Push commits
