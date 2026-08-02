@@ -3,19 +3,13 @@ class OrchestratorMcpServer < Formula
 
   desc "Capability-routed MCP server: route each request to the model configured for it"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/9e/0a/78f0064a019c2df20544be7649a347e7286c62919dca4445ce414ad75fa5/orchestrator_mcp_server-0.1.1.tar.gz"
-  sha256 "7b2a5b975f0b2d2c41017a9f3f32434754d58927a09b71f7f775a3da9ccadbcd"
+  url "https://files.pythonhosted.org/packages/95/96/224ebac28fb54c6261b59a92f668896aa31d07e429cb130783e698d57fdf/orchestrator_mcp_server-0.1.2.tar.gz"
+  sha256 "8f38334f25c9fd5e6b8b674f434d75f80e73a51141289ad10b7ddca2b1b7ff1b"
   license "MIT"
 
   livecheck do
     url :stable
     strategy :pypi
-  end
-
-  bottle do
-    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.1.1"
-    rebuild 1
-    sha256 cellar: :any, arm64_tahoe: "646cfbbd7aab936fd1cd33ee30dffb68ce32f5e33e9e226902ba721e7b85c977"
   end
 
   # pydantic-core, jiter, tokenizers, and rpds-py ship Rust; Homebrew builds every
