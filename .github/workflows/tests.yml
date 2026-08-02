@@ -10,13 +10,13 @@ jobs:
   test-bot:
     strategy:
       matrix:
+        # macOS only. The Linux leg the tap-new template ships needs a container
+        # with `--privileged`, expressed as a job-level `options:` key that
+        # Actions rejects outright -- every run failed before a job started. The
+        # formula's dependencies are all pure Rust or pure Python, so Linux users
+        # can build from source until there is a reason to bottle for them.
         os: [ macos-15-intel, macos-26 ]
-        include:
-          - os: ubuntu-latest
-            container: ghcr.io/homebrew/brew:main
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
-    options: ${{ matrix.container != '' && '--privileged' }}
     permissions:
       actions: read
       checks: read
