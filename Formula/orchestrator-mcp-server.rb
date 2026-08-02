@@ -7,6 +7,11 @@ class OrchestratorMcpServer < Formula
   sha256 "7b2a5b975f0b2d2c41017a9f3f32434754d58927a09b71f7f775a3da9ccadbcd"
   license "MIT"
 
+  livecheck do
+    url :stable
+    strategy :pypi
+  end
+
   # pydantic-core, jiter, tokenizers, and rpds-py ship Rust; Homebrew builds every
   # resource from its sdist, so the toolchain is needed even though wheels exist.
   depends_on "rust" => :build
@@ -327,10 +332,12 @@ class OrchestratorMcpServer < Formula
     ENV.O0
 
     # A Python extension module resolves `_PyExc_*` from the interpreter that
-    # loads it, so it must link with `-undefined dynamic_lookup`. pyo3 asks for
-    # that flag itself; Homebrew's shim drops it, and tokenizers then fails with
-    # "symbol(s) not found for architecture arm64". Put it back.
-    ENV.append "RUSTFLAGS", "-C link-arg=-undefined -C link-arg=dynamic_lookup"
+    # loads it. On macOS that needs `-undefined dynamic_lookup`; pyo3 asks for the
+    # flag itself, Homebrew's shim drops it, and tokenizers then fails with
+    # "symbol(s) not found for architecture arm64". ELF resolves undefined
+    # symbols this way already, and the flag is not valid there, so it is
+    # macOS-only.
+    ENV.append "RUSTFLAGS", "-C link-arg=-undefined -C link-arg=dynamic_lookup" if OS.mac?
 
     virtualenv_install_with_resources
   end
