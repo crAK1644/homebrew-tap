@@ -49,4 +49,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: bottles_${{ matrix.os }}
-          path: '*.bottle.*'
+          # test-bot runs each step with the tap checkout as its working
+          # directory, so that is where the bottles land -- not the workspace the
+          # template's bare glob searches, which uploaded nothing.
+          path: ${{ steps.set-up-homebrew.outputs.repository-path }}/*.bottle.*
