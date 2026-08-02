@@ -10,12 +10,18 @@ jobs:
   test-bot:
     strategy:
       matrix:
-        # macOS only. The Linux leg the tap-new template ships needs a container
-        # with `--privileged`, expressed as a job-level `options:` key that
-        # Actions rejects outright -- every run failed before a job started. The
-        # formula's dependencies are all pure Rust or pure Python, so Linux users
-        # can build from source until there is a reason to bottle for them.
-        os: [ macos-15-intel, macos-26 ]
+        # arm64 macOS only.
+        #
+        # The Linux leg the tap-new template ships needs a container with
+        # `--privileged`, expressed as a job-level `options:` key that Actions
+        # rejects outright -- every run failed before a job started.
+        #
+        # macos-15-intel builds nothing: "orchestrator-mcp-server has unbottled
+        # dependencies, so a bottle will not be built". homebrew-core no longer
+        # bottles this tree for x86, so the leg is a guaranteed skip.
+        #
+        # Both platforms can still build from source.
+        os: [ macos-26 ]
     runs-on: ${{ matrix.os }}
     permissions:
       actions: read

@@ -32,17 +32,18 @@ jobs:
           HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HEAD_SHA: ${{ inputs.head_sha }}
           PULL_REQUEST: ${{ inputs.pull_request }}
-          # Bottles ride on a GitHub release of this tap rather than on GitHub
-          # Packages: a new ghcr package is private by default, which would make
-          # every download 401 until someone flipped it in the web UI. Release
-          # assets inherit the repository's visibility instead.
-          ROOT_URL: https://github.com/${{ github.repository }}/releases/download/bottles
+        # No --root-url: bottles go to a per-version GitHub release of this tap,
+        # `<formula>-<version>`, which is the URL test-bot already wrote into the
+        # formula's `bottle do` block. Overriding it here uploaded the tarball to
+        # one tag while the formula pointed at another. GitHub Packages is the
+        # other option and is not used: a new ghcr package is private by default,
+        # so every download would 401 until someone flipped it in the web UI.
         run: |
           if [[ -n "$HEAD_SHA" ]]
           then
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --root-url="$ROOT_URL" --head-sha="$HEAD_SHA" "$PULL_REQUEST"
+            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --head-sha="$HEAD_SHA" "$PULL_REQUEST"
           else
-            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" --root-url="$ROOT_URL" "$PULL_REQUEST"
+            brew pr-pull --debug --tap="$GITHUB_REPOSITORY" "$PULL_REQUEST"
           fi
 
       - name: Push commits
