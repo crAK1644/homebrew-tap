@@ -15,6 +15,9 @@ class OrchestratorMcpServer < Formula
   # pydantic-core, jiter, tokenizers, and rpds-py ship Rust; Homebrew builds every
   # resource from its sdist, so the toolchain is needed even though wheels exist.
   depends_on "rust" => :build
+  # cryptography's `_rust.abi3.so` links libssl/libcrypto. It arrives indirectly
+  # through python@3.13, which `brew linkage --test` rejects, so declare it.
+  depends_on "openssl@3"
   depends_on "python@3.13"
 
   resource "Jinja2" do
