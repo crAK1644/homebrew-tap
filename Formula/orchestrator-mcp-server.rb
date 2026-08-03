@@ -3,18 +3,13 @@ class OrchestratorMcpServer < Formula
 
   desc "Capability-routed MCP server: route each request to the model configured for it"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/95/96/224ebac28fb54c6261b59a92f668896aa31d07e429cb130783e698d57fdf/orchestrator_mcp_server-0.1.2.tar.gz"
-  sha256 "8f38334f25c9fd5e6b8b674f434d75f80e73a51141289ad10b7ddca2b1b7ff1b"
+  url "https://files.pythonhosted.org/packages/78/df/3463fb13e00dcde15a74e1b54511a0353e10f8c671590b07076d671e5bc4/orchestrator_mcp_server-0.2.0.tar.gz"
+  sha256 "c923d2893870c6468c1f9789debe802c88e6cf8c3e49fcd944416f8deb2830d2"
   license "MIT"
 
   livecheck do
     url :stable
     strategy :pypi
-  end
-
-  bottle do
-    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.1.2"
-    sha256 cellar: :any, arm64_tahoe: "bd04a15fa7727e7cb682f417a003f5683fe186fc7798b0187ae415648c6eeb32"
   end
 
   # pydantic-core, jiter, tokenizers, and rpds-py ship Rust; Homebrew builds every
@@ -355,5 +350,9 @@ class OrchestratorMcpServer < Formula
     # error -- which is what proves the dependency tree resolved.
     output = shell_output("#{bin}/orchestrator-mcp-server 2>&1", 1)
     assert_match "config not found", output
+
+    # Second entry point as of 0.2.0. Same check, same reason.
+    dashboard = shell_output("#{bin}/orchestrator-mcp-dashboard 2>&1", 1)
+    assert_match "config not found", dashboard
   end
 end
