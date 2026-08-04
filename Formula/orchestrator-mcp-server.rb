@@ -3,8 +3,8 @@ class OrchestratorMcpServer < Formula
 
   desc "Capability-routed MCP server: route each request to the model configured for it"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/78/df/3463fb13e00dcde15a74e1b54511a0353e10f8c671590b07076d671e5bc4/orchestrator_mcp_server-0.2.0.tar.gz"
-  sha256 "c923d2893870c6468c1f9789debe802c88e6cf8c3e49fcd944416f8deb2830d2"
+  url "https://files.pythonhosted.org/packages/24/23/a721c50feb93ea3bd8528d618beefa6fc90822479515329c92910bcd82ca/orchestrator_mcp_server-0.3.0.tar.gz"
+  sha256 "c68737395e9e48e1293c2c9ede47504b503ee290a2ae3da03f1bef274671b7d6"
   license "MIT"
 
   livecheck do
