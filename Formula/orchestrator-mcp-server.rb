@@ -1,7 +1,7 @@
 class OrchestratorMcpServer < Formula
   include Language::Python::Virtualenv
 
-  desc "Capability-routed MCP server: route each request to the model configured for it"
+  desc "Consult Codex from Claude Code, or Claude Code from Codex, no API key"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
   url "https://files.pythonhosted.org/packages/24/23/a721c50feb93ea3bd8528d618beefa6fc90822479515329c92910bcd82ca/orchestrator_mcp_server-0.3.0.tar.gz"
   sha256 "c68737395e9e48e1293c2c9ede47504b503ee290a2ae3da03f1bef274671b7d6"
