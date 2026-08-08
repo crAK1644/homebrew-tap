@@ -3,18 +3,13 @@ class OrchestratorMcpServer < Formula
 
   desc "Consult Codex from Claude Code, or Claude Code from Codex, no API key"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/eb/ed/4cc474abf6da8ad10f1c8862587ba8bd1decc402841a01c9c92673f6d8d4/orchestrator_mcp_server-0.4.1.tar.gz"
-  sha256 "01aff8918027b687e0e3318f2234874014f2d717e2f565fbc1f87ade3e356558"
+  url "https://files.pythonhosted.org/packages/59/76/b2e62a1d0b7d0a7476c90cf3841011d1e65dcc53efc73da5c8bc53036f87/orchestrator_mcp_server-0.4.2.tar.gz"
+  sha256 "8651c55b49d2cfa725475687cd57963627c3defa80171538a0ab4a9c41bb79e8"
   license "MIT"
 
   livecheck do
     url :stable
     strategy :pypi
-  end
-
-  bottle do
-    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.4.1"
-    sha256 cellar: :any, arm64_tahoe: "439c5cc56cca3c085598288db2ebc81773928ba76b100b8e41eb1ff85cc57eb0"
   end
 
   # pydantic-core, rpds-py, and cryptography ship Rust; Homebrew builds every
