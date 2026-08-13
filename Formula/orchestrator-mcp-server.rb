@@ -12,6 +12,11 @@ class OrchestratorMcpServer < Formula
     strategy :pypi
   end
 
+  bottle do
+    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.5.0"
+    sha256 cellar: :any, arm64_tahoe: "ff4b4604335af84268ed4ffa04fbbb387e9c1a78135907c8962971d93345597f"
+  end
+
   # pydantic-core, rpds-py, and cryptography ship Rust; Homebrew builds every
   # resource from its sdist, so the toolchain is needed even though wheels exist.
   depends_on "rust" => :build
