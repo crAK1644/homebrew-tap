@@ -1,0 +1,79 @@
+name: bump
+
+# The formula moves only when someone remembers, and it has sat six releases behind
+# PyPI before. This opens the PR; a person still ships it by dispatching
+# publish.yml with its number once test-bot is green.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # dispatch tests.yml on the new branch
+      contents: write # push the branch
+      pull-requests: write # open the PR
+    env:
+      FORMULA: crak1644/tap/orchestrator-mcp-server
+      PACKAGE: orchestrator-mcp-server
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up git
+        uses: Homebrew/actions/git-user-config@1f8e202ffddf94def7f42f6fa3a482e821489f9c # 2026.07.10.1
+
+      - name: Find a version to bump to
+        id: version
+        run: |
+          current=$(brew info --json=v2 "$FORMULA" | jq -r '.formulae[0].versions.stable')
+          pypi=$(curl -fsSL "https://pypi.org/pypi/$PACKAGE/json")
+          latest=$(jq -r .info.version <<<"$pypi")
+          uploaded=$(jq -r '.urls[0].upload_time_iso_8601' <<<"$pypi")
+          branch="bump-$PACKAGE-$latest"
+
+          if [[ "$latest" == "$current" ]]; then
+            echo "Formula is at $current, the latest on PyPI."
+            exit 0
+          fi
+          # `brew update-python-resources` resolves with --uploaded-prior-to=P1D, so
+          # it cannot see a release from the last day. Tomorrow's run picks it up.
+          if (( $(date +%s) - $(date -d "$uploaded" +%s) < 86400 )); then
+            echo "::notice::$latest was uploaded at $uploaded, inside Homebrew's one-day cooldown."
+            exit 0
+          fi
+          # Any state: a closed PR for this version was a decision, not a gap.
+          if [[ $(gh pr list -R "$GITHUB_REPOSITORY" --head "$branch" --state all --json number -q length) != 0 ]]; then
+            echo "A PR for $latest already exists."
+            exit 0
+          fi
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Open the PR
+        if: steps.version.outputs.latest
+        env:
+          LATEST: ${{ steps.version.outputs.latest }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: |
+          # Rewrites url, sha256 and every vendored resource.
+          brew bump-formula-pr --write-only --install-dependencies --version="$LATEST" "$FORMULA"
+
+          cd "$(brew --repository crak1644/tap)"
+          git switch -c "$BRANCH"
+          git commit -am "$PACKAGE $LATEST"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$BRANCH"
+
+          pr=$(gh pr create -R "$GITHUB_REPOSITORY" --base main --head "$BRANCH" \
+            --title "$PACKAGE $LATEST" \
+            --body "Opened by bump.yml. When test-bot is green, dispatch publish.yml with this PR's number; do not merge it by hand, or the bottle is lost.")
+          echo "$pr"
+
+          # A PR opened with GITHUB_TOKEN triggers no workflows, so test-bot is
+          # started explicitly; workflow_dispatch is the exception to that rule.
+          gh workflow run tests.yml -R "$GITHUB_REPOSITORY" --ref "$BRANCH"
