@@ -3,8 +3,8 @@ class OrchestratorMcpServer < Formula
 
   desc "Consult Codex from Claude Code, or Claude Code from Codex, no API key"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/79/19/12b03572c444d967ca636dfeca982d1a618832e9c6ea9506314e48015f3f/orchestrator_mcp_server-0.7.1.tar.gz"
-  sha256 "f7a643669626206917d8e1cde8a9eab0813d9585ff7fe8b49863be554a6eaaca"
+  url "https://files.pythonhosted.org/packages/58/6b/bf656953cf1eb9fe4481729b1247f3086419486a524f40b37295dfe40db7/orchestrator_mcp_server-0.7.3.tar.gz"
+  sha256 "18fa1dba9b0bb32b5aea34346eedb34e3b9ef7960f883fea315937805793f41d"
   license "MIT"
 
   livecheck do
@@ -186,10 +186,11 @@ class OrchestratorMcpServer < Formula
   end
 
   test do
-    # No config, so this must fail with the config error rather than an import
-    # error -- which is what proves the dependency tree resolved.
-    output = shell_output("#{bin}/orchestrator-mcp-server 2>&1", 1)
-    assert_match "config not found", output
+    # No config: since 0.7.2 the server starts anyway, serving only its setup
+    # tool, and exits when stdin closes. Getting that far rather than to an
+    # import error is what proves the dependency tree resolved.
+    output = shell_output("#{bin}/orchestrator-mcp-server 2>&1 </dev/null")
+    assert_match "serving only orchestrator_setup", output
 
     # Second entry point as of 0.2.0. Same check, same reason.
     dashboard = shell_output("#{bin}/orchestrator-mcp-dashboard 2>&1", 1)
