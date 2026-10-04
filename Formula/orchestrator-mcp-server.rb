@@ -3,8 +3,8 @@ class OrchestratorMcpServer < Formula
 
   desc "Consult Codex from Claude Code, or Claude Code from Codex, no API key"
   homepage "https://github.com/crAK1644/orchestrator-mcp"
-  url "https://files.pythonhosted.org/packages/cf/11/65bd27488bb7a8b2d99097a4b0cca740d71b769e5899369320f8a5a82f68/orchestrator_mcp_server-0.10.4.tar.gz"
-  sha256 "ff52131a08a84f54bb4e606f8db6534e7eff9e83bb88b54a5d51dcf781e0ac76"
+  url "https://files.pythonhosted.org/packages/f9/d4/463cf2d1ce1d6325237daf51b6344e5e3021017b62ee56b26dc9feb3603a/orchestrator_mcp_server-0.11.0.tar.gz"
+  sha256 "ba863b390dd2484df0ae237f2d8d40a399872dd8d76565b0cf22dce8f8a1a106"
   license "MIT"
 
   livecheck do
