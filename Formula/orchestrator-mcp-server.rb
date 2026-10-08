@@ -13,8 +13,8 @@ class OrchestratorMcpServer < Formula
   end
 
   bottle do
-    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.11.0"
-    sha256 cellar: :any, arm64_tahoe: "373e67bd927763e3e92834b15dcd70f42fecd96ee838892bda536ea02fcf604d"
+    root_url "https://github.com/crAK1644/homebrew-tap/releases/download/orchestrator-mcp-server-0.12.0"
+    sha256 cellar: :any, arm64_tahoe: "08d9ad653310af6abeb7ec1c938ce79173e2108716a368faee45d208f44a3ea7"
   end
 
   # pydantic-core, rpds-py, and cryptography ship Rust; Homebrew builds every
